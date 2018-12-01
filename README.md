@@ -1,10 +1,12 @@
---a fork for presentation of two example of SPMD programs--
-command.txt --> commands needed for compile and run the code on my system
-mandelbrot and noise example presented
-
-
 [![TravisCI build status (Linux)](https://travis-ci.com/ispc/ispc.svg?branch=master)](https://travis-ci.com/ispc/ispc)
 [![Appveyor build status (Windows)](https://ci.appveyor.com/api/projects/status/xfllw9vkp3lj4l0v/branch/master?svg=true)](https://ci.appveyor.com/project/ispc/ispc/branch/master)
+
+Farzin Presentation :D
+==============================
+
+a fork for presentation of two example of SPMD programs
+command.txt --> commands needed for compile and run the code on my system
+mandelbrot and noise example presented
 
 Intel(r) SPMD Program Compiler
 ==============================
