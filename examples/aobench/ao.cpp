@@ -54,9 +54,23 @@
 #include "ao_ispc.h"
 using namespace ispc;
 
-#include "../timing.h"
+#include<time.h>
+#include<sys/time.h>
 
 #define NSUBSAMPLES        2
+
+struct timeval start, end;
+
+void set_clock(){
+	gettimeofday(&start, NULL);
+}
+
+double get_elapsed_time(){
+	gettimeofday(&end, NULL);
+	double elapsed = (end.tv_sec - start.tv_sec) * 1000000.0;
+	elapsed += end.tv_usec - start.tv_usec;
+	return elapsed;
+}
 
 extern void ao_serial(int w, int h, int nsubsamples, float image[]);
 
@@ -135,9 +149,9 @@ int main(int argc, char **argv)
         memset((void *)fimg, 0, sizeof(float) * width * height * 3);
         assert(NSUBSAMPLES == 2);
 
-        reset_and_start_timer();
+        set_clock();
         ao_ispc(width, height, NSUBSAMPLES, fimg);
-        double t = get_elapsed_mcycles();
+        double t = get_elapsed_time();
         printf("@time of ISPC run:\t\t\t[%.3f] million cycles\n", t);
         minTimeISPC = std::min(minTimeISPC, t);
     }
@@ -156,9 +170,9 @@ int main(int argc, char **argv)
         memset((void *)fimg, 0, sizeof(float) * width * height * 3);
         assert(NSUBSAMPLES == 2);
 
-        reset_and_start_timer();
+        set_clock();
         ao_ispc_tasks(width, height, NSUBSAMPLES, fimg);
-        double t = get_elapsed_mcycles();
+        double t = get_elapsed_time();
         printf("@time of ISPC + TASKS run:\t\t\t[%.3f] million cycles\n", t);
         minTimeISPCTasks = std::min(minTimeISPCTasks, t);
     }
@@ -175,9 +189,9 @@ int main(int argc, char **argv)
     double minTimeSerial = 1e30;
     for (unsigned int i = 0; i < test_iterations[2]; i++) {
         memset((void *)fimg, 0, sizeof(float) * width * height * 3);
-        reset_and_start_timer();
+        set_clock();
         ao_serial(width, height, NSUBSAMPLES, fimg);
-        double t = get_elapsed_mcycles();
+        double t = get_elapsed_time();
         printf("@time of serial run:\t\t\t\t[%.3f] million cycles\n", t);
         minTimeSerial = std::min(minTimeSerial, t);
     }

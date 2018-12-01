@@ -1,0 +1,12 @@
+
+**mandelbrot**
+ispc --arch=x86 -O2 --target=avx mandelbrot.ispc -o objs/mandelbrot_ispc.o -h objs/mandelbrot_ispc.h
+g++ mandelbrot.cpp -Iobjs/ -O3 -Wall -c -o objs/mandelbrot.o
+g++ mandelbrot_serial.cpp -Iobjs/ -O3 -Wall -c -o objs/mandelbrot_serial.o
+g++ -Iobjs/ -O3 -Wall -o mandelbrot objs/mandelbrot.o objs/mandelbrot_ispc.o objs/mandelbrot_serial.o -lm
+
+**perlinNoise**
+ispc --arch=x86 -O2 --target=avx noise.ispc -o objs/noise_ispc.o -h objs/noise_ispc.h
+g++ noise.cpp -Iobjs/ -O3 -Wall -c -o objs/noise.o
+g++ noise_serial.cpp -Iobjs/ -O3 -Wall -c -o objs/noise_serial.o
+g++ -Iobjs/ -O3 -Wall -o noise objs/noise.o objs/noise_ispc.o objs/noise_serial.o -lm

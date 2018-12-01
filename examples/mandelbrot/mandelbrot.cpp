@@ -40,11 +40,27 @@
 
 #include <stdio.h>
 #include <algorithm>
-#include "../timing.h"
+
+#include<time.h>
+#include<sys/time.h>
+
 #include "mandelbrot_ispc.h"
 #include <string.h>
 #include <cstdlib>
 using namespace ispc;
+
+struct timeval start, end;
+
+void set_clock(){
+	gettimeofday(&start, NULL);
+}
+
+double get_elapsed_time(){
+	gettimeofday(&end, NULL);
+	double elapsed = (end.tv_sec - start.tv_sec) * 1000000.0;
+	elapsed += end.tv_usec - start.tv_usec;
+	return elapsed;
+}
 
 extern void mandelbrot_serial(float x0, float y0, float x1, float y1,
                               int width, int height, int maxIterations,
@@ -100,9 +116,9 @@ int main(int argc, char *argv[]) {
     //
     double minISPC = 1e30;
     for (unsigned int i = 0; i < test_iterations[0]; ++i) {
-        reset_and_start_timer();
+        set_clock(); //lol
         mandelbrot_ispc(x0, y0, x1, y1, width, height, maxIterations, buf);
-        double dt = get_elapsed_mcycles();
+        double dt = get_elapsed_time();
         printf("@time of ISPC run:\t\t\t[%.3f] million cycles\n", dt);
         minISPC = std::min(minISPC, dt);
     }
@@ -120,9 +136,9 @@ int main(int argc, char *argv[]) {
     //
     double minSerial = 1e30;
     for (unsigned int i = 0; i < test_iterations[1]; ++i) {
-        reset_and_start_timer();
+        set_clock();
         mandelbrot_serial(x0, y0, x1, y1, width, height, maxIterations, buf);
-        double dt = get_elapsed_mcycles();
+        double dt = get_elapsed_time();
         printf("@time of serial run:\t\t\t[%.3f] million cycles\n", dt);
         minSerial = std::min(minSerial, dt);
     }

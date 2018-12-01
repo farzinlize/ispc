@@ -15,6 +15,7 @@ alloy_results_*
 examples/*/*.png
 examples/*/*.ppm
 examples/*/objs/*
+examples/*/*.exe
 examples/*/ref
 examples/*/test
 *.swp
